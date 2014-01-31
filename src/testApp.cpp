@@ -1,17 +1,26 @@
 #include "testApp.h"
 #include "OpenStreetMapProvider.h"
 
+void testApp::loadLocations(){
+    for (int i = 1; i<csv.numRows; i++) {
+        if (!csv.data[i].empty() && !csv.data[i][12].empty() && !csv.data[i][13].empty() ) {
+            
+            locations.push_back(Location((double)csv.getFloat(i, 12),(double)csv.getFloat(i, 13)));
+            cout << "Adding: " << i << " [" << csv.getInt(i, 0) << "] (" << csv.data[i][12] << "," << csv.data[i][13] << "|" << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << ")" << endl;
+        }
+    }
+    
+    doneParsing = true;
+}
+
 //--------------------------------------------------------------
 void testApp::setup(){
     
     // Loading CSV file
-    csv.loadFile(ofToDataPath("hotelShort.txt"),"~");
+    csv.loadFile(ofToDataPath("hotelsBase.txt"),"~");
+    doneParsing = false;
     
-    for (int i = 1; i<csv.numRows; i++) {
-        
-        locations.push_back(Location((double)csv.getFloat(i, 12),(double)csv.getFloat(i, 13)));
-        cout << "Adding lat and long to locations vector: " << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << endl;
-    }
+    loadLocations();
     
 	ofSetVerticalSync(true);
 	//ofSetFrameRate(100);
@@ -21,6 +30,8 @@ void testApp::setup(){
     // Change color of circle
 
 }
+
+
 
 //--------------------------------------------------------------
 void testApp::update(){
@@ -38,8 +49,10 @@ void testApp::draw(){
     ofSetColor(255, 0, 0);
     ofFill();
     // Draw points on screen
-    for (std::vector<Location>::iterator it = locations.begin(); it != locations.end(); ++it) {
-        ofCircle(map.locationPoint(*it).x, map.locationPoint(*it).y, 10);
+    if (doneParsing){
+        for (std::vector<Location>::iterator it = locations.begin(); it != locations.end(); ++it) {
+            ofCircle(map.locationPoint(*it).x, map.locationPoint(*it).y, 10);
+        }
     }
     ofPopStyle();
 }
