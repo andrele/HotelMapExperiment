@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DB834A4F-55D1-4F47-A3DC-B1EEE9418371</string>
+	<key>IDESourceControlProjectName</key>
+	<string>modestMaps</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CD641B8B-00B5-4BF9-A3E6-29D222C39B82</key>
+		<string>https://github.com/RandomEtc/modestmaps-of.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>modestMapsExample/modestMaps.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CD641B8B-00B5-4BF9-A3E6-29D222C39B82</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/RandomEtc/modestmaps-of.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CD641B8B-00B5-4BF9-A3E6-29D222C39B82</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CD641B8B-00B5-4BF9-A3E6-29D222C39B82</string>
+			<key>IDESourceControlWCCName</key>
+			<string>modestmaps-of</string>
+		</dict>
+	</array>
+</dict>
+</plist>
