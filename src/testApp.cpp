@@ -9,7 +9,7 @@ void testApp::setup(){
     
     for (int i = 1; i<csv.numRows; i++) {
         
-        locations.push_back(geoPoint(csv.getFloat(i,12),csv.getFloat(i,13)));
+        locations.push_back(Location((double)csv.getFloat(i, 12),(double)csv.getFloat(i, 13)));
         cout << "Adding lat and long to locations vector: " << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << endl;
     }
     
@@ -17,6 +17,9 @@ void testApp::setup(){
 	//ofSetFrameRate(100);
 	map.setup(new OpenStreetMapProvider(), (double)ofGetWidth(), (double)ofGetHeight());
 	map.setZoom(3);
+    
+    // Change color of circle
+
 }
 
 //--------------------------------------------------------------
@@ -30,6 +33,15 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){    
     map.draw();
+    
+    ofPushStyle();
+    ofSetColor(255, 0, 0);
+    ofFill();
+    // Draw points on screen
+    for (std::vector<Location>::iterator it = locations.begin(); it != locations.end(); ++it) {
+        ofCircle(map.locationPoint(*it).x, map.locationPoint(*it).y, 10);
+    }
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------

@@ -34,7 +34,7 @@ class testApp : public ofBaseApp{
 
 	Map map;
     ofxCsv csv;
-    vector<geoPoint> locations;
+    vector<Location> locations;
 };
 
 #endif
