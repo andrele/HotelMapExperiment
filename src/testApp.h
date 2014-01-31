@@ -4,7 +4,18 @@
 #include "ofMain.h"
 #include "Map.h"
 #include "OpenStreetMapProvider.h"
-#include
+#include "ofxCsv.h"
+
+using namespace wng;
+
+struct geoPoint {
+    float latitude;
+    float longitude;
+    geoPoint(float lt, float lg) {
+        latitude = lt;
+        longitude = lg;
+    }
+};
 
 class testApp : public ofBaseApp{
 
@@ -22,6 +33,8 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 
 	Map map;
+    ofxCsv csv;
+    vector<geoPoint> locations;
 };
 
 #endif

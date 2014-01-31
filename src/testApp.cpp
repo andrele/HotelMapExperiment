@@ -3,6 +3,16 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    
+    // Loading CSV file
+    csv.loadFile(ofToDataPath("hotelShort.txt"),"~");
+    
+    for (int i = 1; i<csv.numRows; i++) {
+        
+        locations.push_back(geoPoint(csv.getFloat(i,12),csv.getFloat(i,13)));
+        cout << "Adding lat and long to locations vector: " << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << endl;
+    }
+    
 	ofSetVerticalSync(true);
 	//ofSetFrameRate(100);
 	map.setup(new OpenStreetMapProvider(), (double)ofGetWidth(), (double)ofGetHeight());
