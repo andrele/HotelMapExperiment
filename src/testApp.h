@@ -10,14 +10,16 @@
 using namespace wng;
 
 struct Hotel {
-    Location location;
+    float latitude;
+    float longitude;
     int rating;
     int rooms;
     int chainId;
     string url;
     string tripadvisor;
     Hotel(float lt, float lg, int rt, int rms, int chain, string pUrl, string taurl) {
-        location = Location(lt, lg);
+        latitude = lt;
+        longitude = lg;
         rooms = rms;
         rating = rt;
         chainId = chain;
@@ -25,6 +27,29 @@ struct Hotel {
         tripadvisor = taurl;
     }
 };
+
+struct Airport {
+    string name;
+    string city;
+    float latitude;
+    float longitude;
+    Airport(string name, string city, float latitude, float longitude) {
+        this->name = name;
+        this->city = city;
+        this->latitude = latitude;
+        this->longitude = longitude;
+    }
+};
+
+struct FlightPath {
+    int sourceAirportId;
+    int destAirportId;
+    FlightPath(int sourceAirportId, int destAirportId){
+        this->sourceAirportId = sourceAirportId;
+        this->destAirportId = destAirportId;
+    }
+};
+
 
 class testApp : public ofBaseApp{
 
@@ -45,14 +70,17 @@ class testApp : public ofBaseApp{
 
 	Map map;
     ofxCsv csv;
-    ofxCsv airports;
-    ofxCsv flightPaths;
+    ofxCsv airportsFile;
+    ofxCsv flightPathsFile;
     vector<Hotel> locations;
+    vector<Airport> airports;
+    vector<FlightPath> flightPaths;
+    std::map< int, vector<Hotel> > chains;
     bool doneParsing;
     
     ofxGrabCam cam;
     ofMesh mesh;
-    ofVboMesh vboMesh;
+    ofMesh flightMesh;
 };
 
 #endif

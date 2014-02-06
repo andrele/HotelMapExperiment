@@ -3,15 +3,37 @@
 
 void testApp::loadLocations(){
     for (int i = 1; i<csv.numRows; i++) {
+        
+        // Rudimentary check for valid data
         if (!csv.data[i].empty() && !csv.data[i][12].empty() && !csv.data[i][13].empty() ) {
             
-            locations.push_back(Hotel(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21),csv.getInt(i, 15), csv.getInt(i, 16), csv.getString(i, 10), csv.getString(i, 11)));
-            mesh.addVertex(ofPoint(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21)));
-            ofColor blue = ofColor::blueSteel;
-            ofColor red = ofColor::red;
-            mesh.addColor(blue.lerp(red, (float)csv.getInt(i, 21)/10));
-            cout << "Adding: " << i << " [" << csv.getInt(i, 0) << "] (" << csv.data[i][12] << "," << csv.data[i][13] << "|" << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << ")" << endl;
+            Hotel newHotel = Hotel(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21),csv.getInt(i, 15), csv.getInt(i, 16), csv.getString(i, 10), csv.getString(i, 11));
+            
+            if (chains.find(newHotel.chainId) == chains.end()) {
+                // Not found, add it!
+                vector<Hotel> chainHotels;
+                chainHotels.push_back(newHotel);
+                chains.insert(std::pair< int,vector<Hotel> >(newHotel.chainId,chainHotels));
+                cout << "Adding new chainId: " << newHotel.chainId << endl;
+            } else {
+                // Added hotel to existing hashmap
+                chains[newHotel.chainId].push_back(newHotel);
+            }
+            
+            cout << "Added hotel: [" << newHotel.chainId << "] " << newHotel.longitude << "," << newHotel.latitude << endl;
+            
+
+//            locations.push_back(Hotel(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21),csv.getInt(i, 15), csv.getInt(i, 16), csv.getString(i, 10), csv.getString(i, 11)));
+//            mesh.addVertex(ofPoint(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21)));
+//            ofColor blue = ofColor::blueSteel;
+//            ofColor red = ofColor::red;
+//            mesh.addColor(blue.lerp(red, (float)csv.getInt(i, 21)/10));
+//            cout << "Adding: " << i << " [" << csv.getInt(i, 0) << "] (" << csv.data[i][12] << "," << csv.data[i][13] << "|" << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << ")" << endl;
         }
+    }
+    
+    for (int i = 1; i<airportsFile.numRows; i++) {
+        Airport
     }
     
     doneParsing = true;
@@ -24,11 +46,12 @@ void testApp::setup(){
     
     // Loading CSV file
     csv.loadFile(ofToDataPath("hotelShort.txt"),"~");
+    airportsFile.loadFile(ofToDataPath("airports.dat"));
+    flightPathsFile.loadFile(ofToDataPath("flight-paths.dat"));
     
     doneParsing = false;
 
     loadLocations();
-    vboMesh = mesh;
     
 	ofSetVerticalSync(false);
 	//ofSetFrameRate(100);
