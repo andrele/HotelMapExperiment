@@ -5,7 +5,11 @@ void testApp::loadLocations(){
     for (int i = 1; i<csv.numRows; i++) {
         if (!csv.data[i].empty() && !csv.data[i][12].empty() && !csv.data[i][13].empty() ) {
             
-            locations.push_back(Location((double)csv.getFloat(i, 12),(double)csv.getFloat(i, 13)));
+            locations.push_back(Hotel(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21),csv.getInt(i, 15), csv.getInt(i, 16), csv.getString(i, 10), csv.getString(i, 11)));
+            mesh.addVertex(ofPoint(csv.getFloat(i, 12),csv.getFloat(i, 13), csv.getInt(i, 21)));
+            ofColor blue = ofColor::blueSteel;
+            ofColor red = ofColor::red;
+            mesh.addColor(blue.lerp(red, (float)csv.getInt(i, 21)/10));
             cout << "Adding: " << i << " [" << csv.getInt(i, 0) << "] (" << csv.data[i][12] << "," << csv.data[i][13] << "|" << csv.getFloat(i, 12) << "," << csv.getFloat(i, 13) << ")" << endl;
         }
     }
@@ -16,19 +20,24 @@ void testApp::loadLocations(){
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    mesh.setMode(OF_PRIMITIVE_POINTS);
+    
     // Loading CSV file
-    csv.loadFile(ofToDataPath("hotelsBase.txt"),"~");
+    csv.loadFile(ofToDataPath("hotelShort.txt"),"~");
+    
     doneParsing = false;
-    
+
     loadLocations();
+    vboMesh = mesh;
     
-	ofSetVerticalSync(true);
+	ofSetVerticalSync(false);
 	//ofSetFrameRate(100);
 	map.setup(new OpenStreetMapProvider(), (double)ofGetWidth(), (double)ofGetHeight());
 	map.setZoom(3);
     
-    // Change color of circle
-
+    ofEnableDepthTest();
+	glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
+	glPointSize(3); // make the points bigger
 }
 
 
@@ -43,17 +52,32 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){    
-    map.draw();
+//    map.draw();
     
     ofPushStyle();
     ofSetColor(255, 0, 0);
     ofFill();
     // Draw points on screen
     if (doneParsing){
-        for (std::vector<Location>::iterator it = locations.begin(); it != locations.end(); ++it) {
-            ofCircle(map.locationPoint(*it).x, map.locationPoint(*it).y, 10);
-        }
+//        for (std::vector<Hotel>::iterator it = locations.begin(); it != locations.end(); ++it) {
+//            Location *loc = &it->location;
+//            ofPushStyle();
+//            ofColor orange = ofColor::orange;
+//            ofColor blue = ofColor::blue;
+//            ofSetColor(blue.lerp(orange, (float)it->rating/10));
+//            ofFill();
+//            ofCircle(map.locationPoint(*loc).x, map.locationPoint(*loc).y, it->rating*0.25);
+//            ofPopStyle();
+//        }
+        cam.begin();
+        ofScale(2, -2, 2); // flip the y axis and zoom in a bit
+//        ofRotateY(90);
+        mesh.draw();
+        cam.end();
+
     }
+    
+    
     ofPopStyle();
 }
 

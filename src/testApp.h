@@ -5,15 +5,24 @@
 #include "Map.h"
 #include "OpenStreetMapProvider.h"
 #include "ofxCsv.h"
+#include "ofxGrabCam.h"
 
 using namespace wng;
 
-struct geoPoint {
-    float latitude;
-    float longitude;
-    geoPoint(float lt, float lg) {
-        latitude = lt;
-        longitude = lg;
+struct Hotel {
+    Location location;
+    int rating;
+    int rooms;
+    int chainId;
+    string url;
+    string tripadvisor;
+    Hotel(float lt, float lg, int rt, int rms, int chain, string pUrl, string taurl) {
+        location = Location(lt, lg);
+        rooms = rms;
+        rating = rt;
+        chainId = chain;
+        url = pUrl;
+        tripadvisor = taurl;
     }
 };
 
@@ -36,8 +45,14 @@ class testApp : public ofBaseApp{
 
 	Map map;
     ofxCsv csv;
-    vector<Location> locations;
+    ofxCsv airports;
+    ofxCsv flightPaths;
+    vector<Hotel> locations;
     bool doneParsing;
+    
+    ofxGrabCam cam;
+    ofMesh mesh;
+    ofVboMesh vboMesh;
 };
 
 #endif
