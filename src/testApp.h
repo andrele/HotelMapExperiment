@@ -73,9 +73,9 @@ class testApp : public ofBaseApp{
     ofxCsv airportsFile;
     ofxCsv flightPathsFile;
     vector<Hotel> locations;
-    vector<Airport> airports;
     vector<FlightPath> flightPaths;
     std::map< int, vector<Hotel> > chains;
+    std::map< int, vector<Airport> > airports;
     bool doneParsing;
     
     ofxGrabCam cam;

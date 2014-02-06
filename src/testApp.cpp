@@ -32,11 +32,29 @@ void testApp::loadLocations(){
         }
     }
     
-    for (int i = 1; i<airportsFile.numRows; i++) {
-        Airport
+    for (int i = 0; i<airportsFile.numRows; i++) {
+        Airport newAirport = Airport(airportsFile.getString(i, 1), airportsFile.getString(i, 4), airportsFile.getFloat(i, 6), airportsFile.getFloat(i, 7));
+        if (airports.find(airportsFile.getInt(i, 0)) == airports.end()) {
+            // Not found. Add one
+            vector<Airport> newAirports;
+            newAirports.push_back(newAirport);
+            airports.insert(std::pair< int,vector<Airport> > (airportsFile.getInt(i, 0),newAirports));
+            cout << "Adding new Airport: " << airportsFile.getInt(i, 0) << endl;
+        } else {
+            airports[airportsFile.getInt(i,0)].push_back(newAirport);
+        }
+    }
+    
+    for (int i = 0; i<flightPathsFile.numRows; i++) {
+        flightPaths.push_back(FlightPath(flightPathsFile.getInt(i, 3), flightPathsFile.getInt(i, 5)));
+        cout << "Added route from: " << flightPathsFile.getInt(i, 3) << " to " << flightPathsFile.getInt(i, 5) << endl;
     }
     
     doneParsing = true;
+    // clean everything up
+    csv.clear();
+    flightPathsFile.clear();
+    airportsFile.clear();
 }
 
 //--------------------------------------------------------------
