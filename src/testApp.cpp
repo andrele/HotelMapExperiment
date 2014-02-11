@@ -2,6 +2,8 @@
 #include "OpenStreetMapProvider.h"
 
 void testApp::loadLocations(){
+    
+
     for (int i = 1; i<csv.numRows; i++) {
         
         // Rudimentary check for valid data
@@ -32,6 +34,33 @@ void testApp::loadLocations(){
         }
     }
     
+    // Connect all the chainIds together
+    // Add all vertices
+    int chainsIndex = 0;
+    for (std::map< int,vector<Hotel> >::iterator it=chains.begin(); it != chains.end(); ++it) {
+        ofMesh chainMesh = ofMesh();
+        chainMesh.enableColors();
+        for (int i = 0; i < it->second.size(); i++) {
+            chainMesh.addVertex(ofVec3f(it->second[i].latitude, it->second[i].longitude, it->second[i].rating));
+            ofColor pointColor(255,0,0);
+            pointColor.setHue(chainsIndex);
+            chainMesh.addColor(pointColor);
+            cout << "[" << it->first << "] " << it->second[i].latitude << "," << it->second[i].longitude << endl;
+        }
+        
+//      chainMesh.enableIndices();
+
+        if (chainsIndex == 0)
+            chainMesh.setMode(OF_PRIMITIVE_POINTS);
+        else
+            chainMesh.setMode(OF_PRIMITIVE_LINE_STRIP);
+        
+        meshes.push_back(chainMesh);
+        chainsIndex++;
+        
+        
+    }
+    
     for (int i = 0; i<airportsFile.numRows; i++) {
         Airport newAirport = Airport(airportsFile.getString(i, 1), airportsFile.getString(i, 4), airportsFile.getFloat(i, 6), airportsFile.getFloat(i, 7));
         if (airports.find(airportsFile.getInt(i, 0)) == airports.end()) {
@@ -59,11 +88,10 @@ void testApp::loadLocations(){
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    
-    mesh.setMode(OF_PRIMITIVE_POINTS);
+
     
     // Loading CSV file
-    csv.loadFile(ofToDataPath("hotelShort.txt"),"~");
+    csv.loadFile(ofToDataPath("hotelsbase.txt"),"~");
     airportsFile.loadFile(ofToDataPath("airports.dat"));
     flightPathsFile.loadFile(ofToDataPath("flight-paths.dat"));
     
@@ -71,14 +99,14 @@ void testApp::setup(){
 
     loadLocations();
     
-	ofSetVerticalSync(false);
+	ofSetVerticalSync(true);
 	//ofSetFrameRate(100);
 	map.setup(new OpenStreetMapProvider(), (double)ofGetWidth(), (double)ofGetHeight());
 	map.setZoom(3);
     
     ofEnableDepthTest();
 	glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
-	glPointSize(3); // make the points bigger
+	glPointSize(2); // make the points bigger
 }
 
 
@@ -92,7 +120,10 @@ void testApp::update(){
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){    
+void testApp::draw(){
+    ofColor centerColor = ofColor(85, 78, 68);
+    ofColor edgeColor(0, 0, 0);
+    ofBackgroundGradient(centerColor, edgeColor, OF_GRADIENT_CIRCULAR);
 //    map.draw();
     
     ofPushStyle();
@@ -111,9 +142,15 @@ void testApp::draw(){
 //            ofPopStyle();
 //        }
         cam.begin();
+        ofPushMatrix();
+        ofRotateX(-90);
+        ofRotateY(-90);
         ofScale(2, -2, 2); // flip the y axis and zoom in a bit
 //        ofRotateY(90);
-        mesh.draw();
+        for (int i = 0;i<meshes.size();i++){
+            meshes[i].draw();
+        }
+        ofPopMatrix();
         cam.end();
 
     }

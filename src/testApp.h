@@ -79,7 +79,8 @@ class testApp : public ofBaseApp{
     bool doneParsing;
     
     ofxGrabCam cam;
-    ofMesh mesh;
+    vector<ofMesh> meshes;
+//    ofMesh mesh;
     ofMesh flightMesh;
 };
 
